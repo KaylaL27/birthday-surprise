@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're Going to See Morgan Wallen!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0705;
+    color: #f5ede0;
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .stars {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #f5ede0;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite var(--delay);
+    opacity: 0;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: var(--max-opacity); }
+  }
+
+  .scene {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3rem 2rem;
+    max-width: 680px;
+    width: 100%;
+  }
+
+  .pre-reveal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .eyebrow {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #c9963a;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 7vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #f5ede0;
+    animation: riseUp 1.2s ease forwards 0.3s;
+    opacity: 0;
+  }
+
+  .headline em {
+    font-style: italic;
+    color: #c9963a;
+  }
+
+  .subtext {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #a89070;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+    animation: fadeIn 1s ease forwards 0.7s;
+    opacity: 0;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: #c9963a;
+    margin: 0 auto;
+    animation: expand 1s ease forwards 0.5s;
+    transform: scaleX(0);
+  }
+
+  .open-btn {
+    margin-top: 0.5rem;
+    background: none;
+    border: 1px solid #c9963a;
+    color: #c9963a;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s ease;
+    animation: fadeIn 1s ease forwards 1s;
+    opacity: 0;
+  }
+
+  .open-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #c9963a;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+
+  .open-btn:hover::before { transform: translateX(0); }
+  .open-btn:hover { color: #0a0705; }
+  .open-btn span { position: relative; z-index: 1; }
+
+  .ticket-reveal {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    animation: riseUp 0.8s ease forwards;
+  }
+
+  .ticket-reveal.active { display: flex; }
+
+  .ticket {
+    width: 100%;
+    max-width: 440px;
+    background: #1a1208;
+    border: 1px solid #c9963a44;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ticket::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #7a5c1e, #c9963a, #e8c070, #c9963a, #7a5c1e);
+  }
+
+  .ticket-top {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px dashed #c9963a33;
+    position: relative;
+  }
+
+  .ticket-artist {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f5ede0;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .ticket-tour {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #c9963a;
+    font-weight: 300;
+  }
+
+  .ticket-bottom {
+    padding: 1.25rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .ticket-field label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #7a6540;
+    margin-bottom: 0.3rem;
+  }
+
+  .ticket-field span {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #e8d5b0;
+  }
+
+  .ticket-notch-left, .ticket-notch-right {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #0a0705;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ticket-notch-left { left: -10px; }
+  .ticket-notch-right { right: -10px; }
+
+  .ticket-stub {
+    position: relative;
+  }
+
+  .message-card {
+    max-width: 440px;
+    width: 100%;
+    text-align: left;
+    padding: 1.75rem 2rem;
+    background: #1a1208;
+    border: 1px solid #c9963a22;
+    border-radius: 4px;
+    border-left: 3px solid #c9963a;
+  }
+
+  .message-card p {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #c5b090;
+  }
+
+  .message-card p em {
+    color: #e8c070;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .signature {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: #c9963a;
+    margin-top: 1rem;
+  }
+
+  .confetti-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: -10px;
+    opacity: 0;
+    animation: fall var(--fall-dur) ease-in var(--fall-delay) forwards;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes riseUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes expand { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="confetti-wrap" id="confetti"></div>
+
+<div class="scene">
+  <!-- SCREEN 1: Before the reveal -->
+  <div class="pre-reveal" id="preReveal">
+    <div class="eyebrow">A surprise, just for you</div>
+    <div class="headline">I got us something<br><em>a little special.</em></div>
+    <div class="divider"></div>
+    <div class="subtext">Go ahead. Open it.</div>
+    <button class="open-btn" onclick="reveal()"><span>Open your surprise ✦</span></button>
+  </div>
+
+  <!-- SCREEN 2: The ticket reveal -->
+  <div class="ticket-reveal" id="ticketReveal">
+    <div class="eyebrow">Surprise! 🤠</div>
+    <div class="headline" style="font-size: clamp(1.8rem, 5vw, 3rem); opacity: 1; animation: none;">
+      We're going to see<br><em>Morgan Wallen</em>
+    </div>
+
+    <div class="ticket">
+      <div class="ticket-top">
+        <div class="ticket-artist">Morgan Wallen</div>
+        <!-- TODO: Update tour name if needed -->
+        <div class="ticket-tour">Still The Problem Tour</div>
+      </div>
+      <div class="ticket-bottom">
+        <div class="ticket-field">
+          <label>Date</label>
+          <!-- TODO: Replace with actual date -->
+          <span>June 20, 2025</span>
+        </div>
+        <div class="ticket-field">
+          <label>Venue</label>
+          <!-- TODO: Replace with actual venue -->
+          <span>Soldier Field</span>
+        </div>
+        <div class="ticket-field">
+          <label>Section</label>
+          <!-- TODO: Replace with actual section/seat -->
+          <span>Floor 4</span>
+        </div>
+      </div>
+      <div class="ticket-stub">
+        <div class="ticket-notch-left"></div>
+        <div class="ticket-notch-right"></div>
+      </div>
+    </div>
+
+    <!-- TODO: Customize this message -->
+    <div class="message-card">
+        <p><em>Happy Birthday My Love,</em> I can't wait to experience this with you.</p>
+      <p style="margin-top: 0.75rem;">I love you so much. 🤠</p>
+      <!-- TODO: Replace with your name -->
+      <div class="signature">— Kayla <3</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Generate twinkling stars in the background
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--max-opacity:${0.2+Math.random()*0.5}`;
+    starsEl.appendChild(s);
+  }
+
+  // Swap screens and fire confetti on button click
+  function reveal() {
+    document.getElementById('preReveal').style.display = 'none';
+    document.getElementById('ticketReveal').classList.add('active');
+    launchConfetti();
+  }
+
+  const colors = ['#c9963a','#e8c070','#f5ede0','#7a5c1e','#fff8ee'];
+
+  function launchConfetti() {
+    const wrap = document.getElementById('confetti');
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      const size = 6 + Math.random() * 8;
+      c.style.cssText = `
+        left:${Math.random()*100}%;
+        width:${size}px;
+        height:${size}px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        border-radius:${Math.random() > 0.5 ? '50%' : '0'};
+        --fall-dur:${1.5+Math.random()*2}s;
+        --fall-delay:${Math.random()*0.8}s;
+      `;
+      wrap.appendChild(c);
+    }
+    setTimeout(() => wrap.innerHTML = '', 4000);
+  }
+</script>
+</body>
+</html>
